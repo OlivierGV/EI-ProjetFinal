@@ -3,12 +3,21 @@ using UnityEngine.AI;
 
 public class PointsApparitionsChats : MonoBehaviour
 {
+    /// <summary>
+    /// Gameobject à faire apparaître
+    /// </summary>
     [SerializeField]
     private GameObject chat;
 
+    /// <summary>
+    /// Rayon d'apparition
+    /// </summary>
     [SerializeField]
     private float rayonRecherche;
 
+    /// <summary>
+    /// Combien de gameobjects
+    /// </summary>
     [SerializeField]
     private float nombreApparition;
 
@@ -23,6 +32,7 @@ public class PointsApparitionsChats : MonoBehaviour
     /// </summary>
     void faireApparaitreChats()
     {
+        /** Code généré par intelligence artificielle */
         for(int i = 0; i < nombreApparition; i++)
         {
             Vector3 directionAleatoire = Random.insideUnitCircle * rayonRecherche;
@@ -35,5 +45,6 @@ public class PointsApparitionsChats : MonoBehaviour
                 Instantiate(chat, hit.position, Quaternion.identity);
             }
         }
+        /** fin de la génération */
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEditor.EditorTools;
 using UnityEngine;
@@ -43,6 +44,11 @@ public class Chat : MonoBehaviour
     /// Vitesse active
     /// </summary>
     float vitesse;
+    
+    /// <summary>
+    /// Vélocité du minou
+    /// </summary>
+    float velocite;
 
     /// <summary>
     /// État du chat
@@ -61,7 +67,8 @@ public class Chat : MonoBehaviour
     Animator animator;
 
     void Awake()
-    {   
+    {
+        StartCoroutine(CalculVitesse());
         verificationDebutScript();
     }
 
@@ -105,7 +112,7 @@ public class Chat : MonoBehaviour
     /// <exception cref="System.Exception"></exception>
     void verificationDebutScript()
     {
-        etatChat = 1; //UnityEngine.Random.Range(0, 1);
+        etatChat = UnityEngine.Random.Range(0, 2);
 
         if (vitesseMarche <= 0)
         {
@@ -142,5 +149,18 @@ public class Chat : MonoBehaviour
         }
 
         agent.speed = vitesse;
+    }
+
+    IEnumerator CalculVitesse()
+    {
+        bool doitJouer = true;
+        while (doitJouer)
+        {
+            Vector3 prevPos = transform.position;
+
+            yield return new WaitForFixedUpdate();
+
+            velocite = Mathf.RoundToInt(Vector3.Distance(transform.position, prevPos) / Time.fixedDeltaTime);
+        }
     }
 }

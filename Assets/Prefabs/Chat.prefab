@@ -1302,7 +1302,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rayonDeplacement: 10
   tempsEntreDeplacement: 3
-  vitesseMarche: 1
+  vitesseMarche: 3
   vitesseCourse: 5
   pointRecupere: 0
 --- !u!1 &8134145183881799571
