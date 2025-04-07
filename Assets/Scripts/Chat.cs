@@ -1,17 +1,30 @@
+using Unity.VisualScripting;
 using UnityEditor.EditorTools;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class Chat : MonoBehaviour
 {
+    /// <summary>
+    /// Distance max que le chat peut parcourir 
+    /// </summary>
     [SerializeField]
     float rayonDeplacement = 20f;
 
+    /// <summary>
+    /// Le temps entre les déplacements
+    /// </summary>
     [SerializeField]
-    float tempsEntreDeplacement = 5f;
+    float tempsEntreDeplacement = 0f;
 
+    /// <summary>
+    /// NavMesh
+    /// </summary>
     private NavMeshAgent agent;
     
+    /// <summary>
+    /// Temps du jeu
+    /// </summary>
     private float timer;
 
     /// <summary>
@@ -59,11 +72,11 @@ public class Chat : MonoBehaviour
 
         if (timer >= tempsEntreDeplacement)
         {
-            etatChat = 2;
             // Génère une nouvelle destination aléatoire sur le NavMesh
             Vector3 newPos = RandomNavMeshLocation(rayonDeplacement);
             agent.SetDestination(newPos);
             timer = 0;
+            tempsEntreDeplacement = Random.Range(2f, 5f);
         }
 
         controleurDeplacement();
@@ -92,7 +105,7 @@ public class Chat : MonoBehaviour
     /// <exception cref="System.Exception"></exception>
     void verificationDebutScript()
     {
-        etatChat = UnityEngine.Random.Range(0, 1);
+        etatChat = 1; //UnityEngine.Random.Range(0, 1);
 
         if (vitesseMarche <= 0)
         {
