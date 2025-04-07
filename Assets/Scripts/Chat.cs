@@ -1,17 +1,31 @@
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEditor.EditorTools;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class Chat : MonoBehaviour
 {
+    /// <summary>
+    /// Distance max que le chat peut parcourir 
+    /// </summary>
     [SerializeField]
     float rayonDeplacement = 20f;
 
+    /// <summary>
+    /// Le temps entre les déplacements
+    /// </summary>
     [SerializeField]
-    float tempsEntreDeplacement = 5f;
+    float tempsEntreDeplacement = 0f;
 
+    /// <summary>
+    /// NavMesh
+    /// </summary>
     private NavMeshAgent agent;
     
+    /// <summary>
+    /// Temps du jeu
+    /// </summary>
     private float timer;
 
     /// <summary>
@@ -30,6 +44,11 @@ public class Chat : MonoBehaviour
     /// Vitesse active
     /// </summary>
     float vitesse;
+    
+    /// <summary>
+    /// Vélocité du minou
+    /// </summary>
+    float velocite;
 
     /// <summary>
     /// État du chat
@@ -48,7 +67,8 @@ public class Chat : MonoBehaviour
     Animator animator;
 
     void Awake()
-    {   
+    {
+        StartCoroutine(CalculVitesse());
         verificationDebutScript();
     }
 
@@ -59,11 +79,11 @@ public class Chat : MonoBehaviour
 
         if (timer >= tempsEntreDeplacement)
         {
-            etatChat = 2;
             // Génère une nouvelle destination aléatoire sur le NavMesh
             Vector3 newPos = RandomNavMeshLocation(rayonDeplacement);
             agent.SetDestination(newPos);
             timer = 0;
+            tempsEntreDeplacement = Random.Range(2f, 5f);
         }
 
         controleurDeplacement();
@@ -92,7 +112,7 @@ public class Chat : MonoBehaviour
     /// <exception cref="System.Exception"></exception>
     void verificationDebutScript()
     {
-        etatChat = UnityEngine.Random.Range(0, 1);
+        etatChat = UnityEngine.Random.Range(0, 2);
 
         if (vitesseMarche <= 0)
         {
@@ -129,5 +149,18 @@ public class Chat : MonoBehaviour
         }
 
         agent.speed = vitesse;
+    }
+
+    IEnumerator CalculVitesse()
+    {
+        bool doitJouer = true;
+        while (doitJouer)
+        {
+            Vector3 prevPos = transform.position;
+
+            yield return new WaitForFixedUpdate();
+
+            velocite = Mathf.RoundToInt(Vector3.Distance(transform.position, prevPos) / Time.fixedDeltaTime);
+        }
     }
 }
