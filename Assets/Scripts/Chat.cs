@@ -66,10 +66,16 @@
         /// </summary>
         Animator animator;
 
+        /// <summary>
+        /// AudioSource du chat
+        /// </summary>
+        AudioSource audioSource;
+
         void Awake()
         {
             StartCoroutine(CalculVitesse());
             verificationDebutScript();
+        faireMourir();
         }
 
         // Update is called once per frame
@@ -128,6 +134,15 @@
             agent = GetComponent<NavMeshAgent>();
             timer = tempsEntreDeplacement;
             animator = GetComponent<Animator>();
+            audioSource = GetComponent<AudioSource>();
+        }
+
+        /// <summary>
+        /// Appeler l'animation de mort
+        /// </summary>
+        void faireMourir()
+        {
+            StartCoroutine(Mourrir());
         }
     
 
@@ -157,5 +172,18 @@
 
                 velocite = Mathf.RoundToInt(Vector3.Distance(transform.position, prevPos) / Time.fixedDeltaTime);
             }
+        }
+
+        /// <summary>
+        /// Scénario de mort
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator Mourrir()
+        {
+            audioSource.Play();
+
+            yield return new WaitWhile(() => audioSource.isPlaying);
+
+            Destroy(gameObject);
         }
     }
