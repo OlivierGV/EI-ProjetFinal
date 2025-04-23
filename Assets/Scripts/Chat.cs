@@ -29,6 +29,16 @@
         private float timer;
 
         /// <summary>
+        /// Temps du jeu (pour les miaulements)
+        /// </summary>
+        private float timerMiaulement;
+
+        /// <summary>
+        /// Temps entre les miaulements
+        /// </summary>
+        private int tempsCible;
+
+        /// <summary>
         /// Vitesse de déplacement lorsqu'en marche
         /// </summary>
         [SerializeField]
@@ -75,13 +85,14 @@
         {
             StartCoroutine(CalculVitesse());
             verificationDebutScript();
-        faireMourir();
+            miauler();
         }
 
         // Update is called once per frame
         void Update()
         {
             timer += Time.deltaTime;
+            timerMiaulement += Time.deltaTime; 
 
             if (timer >= tempsEntreDeplacement)
             {
@@ -90,6 +101,13 @@
                 agent.SetDestination(newPos);
                 timer = 0;
                 tempsEntreDeplacement = Random.Range(2f, 5f);
+            }
+
+            if (timerMiaulement >= tempsCible)
+            {
+                timerMiaulement = 0f;
+                miauler();
+                audioSource.Play();
             }
 
             controleurDeplacement();
@@ -142,7 +160,7 @@
         /// </summary>
         void faireMourir()
         {
-            StartCoroutine(Mourrir());
+            Destroy(gameObject);
         }
     
 
@@ -155,6 +173,12 @@
 
             vitesse = enCourse ? vitesseCourse : vitesseMarche;
             agent.speed = vitesse;
+        }
+
+        void miauler()
+        {
+            int[] tempsRonds = { 15, 20, 30, 45, 60, 75, 90 };
+            tempsCible = tempsRonds[Random.Range(0, tempsRonds.Length)];
         }
 
         /// <summary>
@@ -172,18 +196,5 @@
 
                 velocite = Mathf.RoundToInt(Vector3.Distance(transform.position, prevPos) / Time.fixedDeltaTime);
             }
-        }
-
-        /// <summary>
-        /// Scénario de mort
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator Mourrir()
-        {
-            audioSource.Play();
-
-            yield return new WaitWhile(() => audioSource.isPlaying);
-
-            Destroy(gameObject);
         }
     }
