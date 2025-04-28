@@ -1,133 +1,200 @@
-using UnityEditor.EditorTools;
-using UnityEngine;
-using UnityEngine.AI;
+    using System.Collections;
+    using Unity.VisualScripting;
+    using UnityEditor.EditorTools;
+    using UnityEngine;
+    using UnityEngine.AI;
 
-public class Chat : MonoBehaviour
-{
-    [SerializeField]
-    float rayonDeplacement = 20f;
+    public class Chat : MonoBehaviour
+    {
+        /// <summary>
+        /// Distance max que le chat peut parcourir 
+        /// </summary>
+        [SerializeField]
+        float rayonDeplacement = 20f;
 
-    [SerializeField]
-    float tempsEntreDeplacement = 5f;
+        /// <summary>
+        /// Le temps entre les déplacements
+        /// </summary>
+        [SerializeField]
+        float tempsEntreDeplacement = 0f;
 
-    private NavMeshAgent agent;
+        /// <summary>
+        /// NavMesh
+        /// </summary>
+        private NavMeshAgent agent;
     
-    private float timer;
+        /// <summary>
+        /// Temps du jeu
+        /// </summary>
+        private float timer;
 
-    /// <summary>
-    /// Vitesse de déplacement lorsqu'en marche
-    /// </summary>
-    [SerializeField]
-    float vitesseMarche;
+        /// <summary>
+        /// Temps du jeu (pour les miaulements)
+        /// </summary>
+        private float timerMiaulement;
 
-    /// <summary>
-    /// Vitesse de déplacement lorsqu'en course
-    /// </summary>
-    [SerializeField]
-    float vitesseCourse;
+        /// <summary>
+        /// Temps entre les miaulements
+        /// </summary>
+        private int tempsCible;
 
-    /// <summary>
-    /// Vitesse active
-    /// </summary>
-    float vitesse;
+        /// <summary>
+        /// Vitesse de déplacement lorsqu'en marche
+        /// </summary>
+        [SerializeField]
+        float vitesseMarche;
 
-    /// <summary>
-    /// État du chat
-    /// </summary>
-    int etatChat;
+        /// <summary>
+        /// Vitesse de déplacement lorsqu'en course
+        /// </summary>
+        [SerializeField]
+        float vitesseCourse;
 
-    /// <summary>
-    /// Si le joueur a ramassé les points sur le chat
-    /// </summary>
-    [SerializeField]
-    bool pointRecupere = false;
+        /// <summary>
+        /// Vitesse active
+        /// </summary>
+        float vitesse;
+    
+        /// <summary>
+        /// Vélocité du minou
+        /// </summary>
+        float velocite;
 
-    /// <summary>
-    /// Animator du chat
-    /// </summary>
-    Animator animator;
+        /// <summary>
+        /// État du chat
+        /// </summary>
+        bool enCourse;
 
-    void Awake()
-    {   
-        verificationDebutScript();
-    }
+        /// <summary>
+        /// Si le joueur a ramassé les points sur le chat
+        /// </summary>
+        [SerializeField]
+        bool pointRecupere = false;
 
-    // Update is called once per frame
-    void Update()
-    {
-        timer += Time.deltaTime;
+        /// <summary>
+        /// Animator du chat
+        /// </summary>
+        Animator animator;
 
-        if (timer >= tempsEntreDeplacement)
+        /// <summary>
+        /// AudioSource du chat
+        /// </summary>
+        AudioSource audioSource;
+
+        void Awake()
         {
-            etatChat = 2;
-            // Génère une nouvelle destination aléatoire sur le NavMesh
-            Vector3 newPos = RandomNavMeshLocation(rayonDeplacement);
-            agent.SetDestination(newPos);
-            timer = 0;
+            StartCoroutine(CalculVitesse());
+            verificationDebutScript();
+            miauler();
         }
 
-        controleurDeplacement();
-    }
-
-    /// <summary>
-    /// Générer une localisation aléatoire sur le navmesh
-    /// Code généré par intelligence artificielle
-    /// </summary>
-    /// <param name="radius"></param>
-    /// <returns></returns>
-    public Vector3 RandomNavMeshLocation(float radius)
-    {
-        Vector3 randomDirection = Random.insideUnitSphere * radius;
-
-        randomDirection += transform.position;
-
-        NavMeshHit navHit;
-        NavMesh.SamplePosition(randomDirection, out navHit, radius, -1);
-        return navHit.position;
-    }
-
-    /// <summary>
-    /// Les vérifications à faire lors de l'Awake
-    /// </summary>
-    /// <exception cref="System.Exception"></exception>
-    void verificationDebutScript()
-    {
-        etatChat = UnityEngine.Random.Range(0, 1);
-
-        if (vitesseMarche <= 0)
+        // Update is called once per frame
+        void Update()
         {
-            throw new System.Exception("[Chat.cs] La vitesse de marche doit être supérieur à 0");
-        }
-        if (vitesseCourse <= 0)
-        {
-            throw new System.Exception("[Chat.cs] La vitesse de course doit être supérieur à 0");
-        }
-        if (vitesseMarche >= vitesseCourse)
-        {
-            throw new System.Exception("[Chat.cs] La vitesse de marche doit être inférieur à la vitesse de course");
+            timer += Time.deltaTime;
+            timerMiaulement += Time.deltaTime; 
+
+            if (timer >= tempsEntreDeplacement)
+            {
+                // Génère une nouvelle destination aléatoire sur le NavMesh
+                Vector3 newPos = RandomNavMeshLocation(rayonDeplacement);
+                agent.SetDestination(newPos);
+                timer = 0;
+                tempsEntreDeplacement = Random.Range(2f, 5f);
+            }
+
+            if (timerMiaulement >= tempsCible)
+            {
+                timerMiaulement = 0f;
+                miauler();
+                audioSource.Play();
+            }
+
+            controleurDeplacement();
         }
 
-        agent = GetComponent<NavMeshAgent>();
-        timer = tempsEntreDeplacement;
-        animator = GetComponent<Animator>();
-    }
+        /// <summary>
+        /// Générer une localisation aléatoire sur le navmesh
+        /// Code généré par intelligence artificielle
+        /// </summary>
+        /// <param name="radius"></param>
+        /// <returns></returns>
+        public Vector3 RandomNavMeshLocation(float radius)
+        {
+            Vector3 randomDirection = Random.insideUnitSphere * radius;
+
+            randomDirection += transform.position;
+
+            NavMeshHit navHit;
+            NavMesh.SamplePosition(randomDirection, out navHit, radius, -1);
+            return navHit.position;
+        }
+
+        /// <summary>
+        /// Les vérifications à faire lors de l'Awake
+        /// </summary>
+        /// <exception cref="System.Exception"></exception>
+        void verificationDebutScript()
+        {
+            if (vitesseMarche <= 0)
+            {
+                throw new System.Exception("[Chat.cs] La vitesse de marche doit être supérieur à 0");
+            }
+            if (vitesseCourse <= 0)
+            {
+                throw new System.Exception("[Chat.cs] La vitesse de course doit être supérieur à 0");
+            }
+            if (vitesseMarche >= vitesseCourse)
+            {
+                throw new System.Exception("[Chat.cs] La vitesse de marche doit être inférieur à la vitesse de course");
+            }
+
+            agent = GetComponent<NavMeshAgent>();
+            timer = tempsEntreDeplacement;
+            animator = GetComponent<Animator>();
+            audioSource = GetComponent<AudioSource>();
+        }
+
+        /// <summary>
+        /// Appeler l'animation de mort
+        /// </summary>
+        void faireMourir()
+        {
+            Destroy(gameObject);
+        }
     
 
-    /// <summary>
-    /// Gestion de la vitesse de déplacement et de l'animation
-    /// </summary>
-    void controleurDeplacement()
-    {
-        animator.SetInteger("etat", etatChat);
+        /// <summary>
+        /// Gestion de la vitesse de déplacement et de l'animation
+        /// </summary>
+        void controleurDeplacement()
+        {
+            animator.SetBool("enCourse", enCourse);
 
-        if (etatChat > 0)
-        {
-            vitesse = etatChat == 1 ? vitesseCourse : vitesseMarche;
-        } else
-        {
-            vitesse = 0;
+            vitesse = enCourse ? vitesseCourse : vitesseMarche;
+            agent.speed = vitesse;
         }
 
-        agent.speed = vitesse;
+        void miauler()
+        {
+            int[] tempsRonds = { 15, 20, 30, 45, 60, 75, 90 };
+            tempsCible = tempsRonds[Random.Range(0, tempsRonds.Length)];
+        }
+
+        /// <summary>
+        /// Calculer la vitesse avec deux déplacements
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator CalculVitesse()
+        {
+            bool doitJouer = true;
+            while (doitJouer)
+            {
+                Vector3 prevPos = transform.position;
+
+                yield return new WaitForFixedUpdate();
+
+                velocite = Mathf.RoundToInt(Vector3.Distance(transform.position, prevPos) / Time.fixedDeltaTime);
+            }
+        }
     }
-}
