@@ -6,7 +6,7 @@ using static OVRPlugin;
 public class Joueur : MonoBehaviour
 {
     [SerializeField]
-    int vitesse = 3;
+    int vitesse = 1;
 
     [SerializeField]
     GameObject ancreYeux;
