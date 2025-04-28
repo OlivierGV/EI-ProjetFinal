@@ -29,6 +29,16 @@
         private float timer;
 
         /// <summary>
+        /// Temps du jeu (pour les miaulements)
+        /// </summary>
+        private float timerMiaulement;
+
+        /// <summary>
+        /// Temps entre les miaulements
+        /// </summary>
+        private int tempsCible;
+
+        /// <summary>
         /// Vitesse de déplacement lorsqu'en marche
         /// </summary>
         [SerializeField]
@@ -66,16 +76,23 @@
         /// </summary>
         Animator animator;
 
+        /// <summary>
+        /// AudioSource du chat
+        /// </summary>
+        AudioSource audioSource;
+
         void Awake()
         {
             StartCoroutine(CalculVitesse());
             verificationDebutScript();
+            miauler();
         }
 
         // Update is called once per frame
         void Update()
         {
             timer += Time.deltaTime;
+            timerMiaulement += Time.deltaTime; 
 
             if (timer >= tempsEntreDeplacement)
             {
@@ -84,6 +101,13 @@
                 agent.SetDestination(newPos);
                 timer = 0;
                 tempsEntreDeplacement = Random.Range(2f, 5f);
+            }
+
+            if (timerMiaulement >= tempsCible)
+            {
+                timerMiaulement = 0f;
+                miauler();
+                audioSource.Play();
             }
 
             controleurDeplacement();
@@ -128,6 +152,15 @@
             agent = GetComponent<NavMeshAgent>();
             timer = tempsEntreDeplacement;
             animator = GetComponent<Animator>();
+            audioSource = GetComponent<AudioSource>();
+        }
+
+        /// <summary>
+        /// Appeler l'animation de mort
+        /// </summary>
+        void faireMourir()
+        {
+            Destroy(gameObject);
         }
     
 
@@ -140,6 +173,12 @@
 
             vitesse = enCourse ? vitesseCourse : vitesseMarche;
             agent.speed = vitesse;
+        }
+
+        void miauler()
+        {
+            int[] tempsRonds = { 15, 20, 30, 45, 60, 75, 90 };
+            tempsCible = tempsRonds[Random.Range(0, tempsRonds.Length)];
         }
 
         /// <summary>
