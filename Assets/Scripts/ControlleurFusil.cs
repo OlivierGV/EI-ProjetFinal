@@ -56,10 +56,19 @@ public class ControlleurFusil : MonoBehaviour
         if (OVRInput.Get(OVRInput.RawButton.RIndexTrigger))
         {
             onTirer();
+            if (!sourceAudio.isPlaying)
+            {
+                sourceAudio.Play();
+            }
+            
         }
         else
         {
             //Sinon on arrête le bruit
+            if (sourceAudio.isPlaying)
+            {
+                sourceAudio.Stop();
+            }
         }
 
     }

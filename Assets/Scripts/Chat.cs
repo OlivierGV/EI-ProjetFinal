@@ -197,4 +197,20 @@
                 velocite = Mathf.RoundToInt(Vector3.Distance(transform.position, prevPos) / Time.fixedDeltaTime);
             }
         }
+
+    /// <summary>
+    /// Si on collisionne avec de l'eau, on s'enfuis
+    /// </summary>
+    /// <param name="collision"></param>
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision != null)
+        {
+            if (!collision.gameObject.CompareTag("eau"))
+            {
+                faireMourir();
+            }
+
+        }
     }
+}
