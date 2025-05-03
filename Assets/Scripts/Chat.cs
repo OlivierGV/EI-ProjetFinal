@@ -208,6 +208,7 @@
         {
             if (!collision.gameObject.CompareTag("eau"))
             {
+                LogiqueJeu.Instance.incrementerPoints();
                 faireMourir();
             }
 
