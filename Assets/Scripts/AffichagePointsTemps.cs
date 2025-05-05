@@ -1,14 +1,16 @@
 using TMPro;
 using UnityEngine;
 
-[RequireComponent(typeof(TextMeshPro))]
+/// <summary>
+/// Affichage des points accumulés et du temps restant à une partie
+/// </summary>
+[RequireComponent(typeof(TextMeshProUGUI))]
 public class AffichagePointsTemps : MonoBehaviour
 {
     /// <summary>
     /// Temps d'une partie en secondes
     /// </summary>
-    [SerializeField]
-    private float tempsPartie = 180;
+    private int tempsPartie = 0;
 
     /// <summary>
     /// Le temps restant
@@ -29,12 +31,12 @@ public class AffichagePointsTemps : MonoBehaviour
     /// <summary>
     /// Référence au textfield
     /// </summary>
-    private TextMeshPro text;
+    private TextMeshProUGUI text;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        text = GetComponent<TextMeshPro>();
+        text = GetComponent<TextMeshProUGUI>();
         minuteur = tempsPartie;
     }
 
@@ -62,13 +64,15 @@ public class AffichagePointsTemps : MonoBehaviour
             secondesText = Mathf.RoundToInt(secondes).ToString();
         }
 
-        //Affichage
+        //S'il ne reste plus de temps, finir la partie
         if (minuteur <= 0)
         {
             timerActif = false;
+            LogiqueJeu.Instance.partieFinie();
         }
         else
         {
+            //Affichage
             text.SetText("Vos points: \n" + points + "\n Temps restant:  \n" + minutesText + ":" + secondesText);
         }
     }
@@ -76,8 +80,9 @@ public class AffichagePointsTemps : MonoBehaviour
     /// <summary>
     /// Commencer le minuteur et le remettre à sa valeur initiale
     /// </summary>
-    public void Commencer()
+    public void Commencer(int temps)
     {
+        tempsPartie = temps;
         timerActif = true;
         minuteur = tempsPartie;
         points = 0;
@@ -94,4 +99,13 @@ public class AffichagePointsTemps : MonoBehaviour
             points += 50;
         }
     }
+
+    /// <summary>
+    /// Accesseurs pour points, minuteur et temps
+    /// </summary>
+    /// <returns></returns>
+    public int GetPoints() { return points; }
+    public float GetMinuteur() { return minuteur; }
+
+    public float GetTemps() { return tempsPartie; }
 }

@@ -3,7 +3,10 @@
     using UnityEditor.EditorTools;
     using UnityEngine;
     using UnityEngine.AI;
-
+    
+/// <summary>
+/// Gérer le comportement d'un chat
+/// </summary>
     public class Chat : MonoBehaviour
     {
         /// <summary>
@@ -197,4 +200,18 @@
                 velocite = Mathf.RoundToInt(Vector3.Distance(transform.position, prevPos) / Time.fixedDeltaTime);
             }
         }
+
+    /// <summary>
+    /// Si le chat est mouillé, on le fait disparaître
+    /// </summary>
+    /// <param name="collision"></param>
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "eau" && !pointRecupere)
+        {
+            pointRecupere = true;
+            LogiqueJeu.Instance.incrementerPoints();
+            faireMourir();
+        }
     }
+}

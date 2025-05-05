@@ -1126,6 +1126,7 @@ GameObject:
   - component: {fileID: 8334280768027294902}
   - component: {fileID: 926556631804359973}
   - component: {fileID: 1749570160855835714}
+  - component: {fileID: 1945080352983944378}
   m_Layer: 0
   m_Name: Chat
   m_TagString: Untagged
@@ -1220,7 +1221,7 @@ AudioSource:
   m_GameObject: {fileID: 6354007751708776027}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 1463727327512321010, guid: ac167fa822db4964e9c1b33db98a6862, type: 2}
   m_audioClip: {fileID: 8300000, guid: 3f223b2243000db4ab853354045862f3, type: 3}
   m_Resource: {fileID: 8300000, guid: 3f223b2243000db4ab853354045862f3, type: 3}
   m_PlayOnAwake: 0
@@ -1308,6 +1309,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!65 &1945080352983944378
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6354007751708776027}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.26343918, y: 0.31118533, z: 0.57270813}
+  m_Center: {x: -0.0017910004, y: 0.15228923, z: -0.05569458}
 --- !u!1 &6704027953071657571
 GameObject:
   m_ObjectHideFlags: 0

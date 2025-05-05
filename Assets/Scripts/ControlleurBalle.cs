@@ -16,7 +16,6 @@ public class ControlleurBalle : MonoBehaviour
         {
             if (!collision.gameObject.CompareTag("eau"))
             {
-                Debug.Log("AAAAAAAAAAA");
                 //La balle se détruit après une collision
                 Destroy(this.gameObject);
             }
