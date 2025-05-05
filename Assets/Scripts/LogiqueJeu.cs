@@ -59,8 +59,6 @@ public class LogiqueJeu : MonoBehaviour
     [SerializeField]
     private string nomTriggerAnimation = "finScene";
 
-    private bool animationLancee = false;
-
     /// Temps d'une partie en secondes
     /// </summary>
     [SerializeField]
@@ -111,6 +109,7 @@ public class LogiqueJeu : MonoBehaviour
     public void partieFinie()
     {
         StartCoroutine(JouerAnimationEtChangerScene());
+
         pointsFinaux = affichagePointsTemps.GetPoints();
         tempsDernierePartie = Mathf.Round(tempsPartie - affichagePointsTemps.GetMinuteur());
         SceneManager.LoadScene(nomScene);

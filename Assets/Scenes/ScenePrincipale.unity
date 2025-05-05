@@ -6085,7 +6085,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chat: {fileID: 6354007751708776027, guid: 1aa657183546e5a409be3653ae677032, type: 3}
   rayonRecherche: 50
-  nombreApparition: 10
+  nombreApparition: 20
 --- !u!4 &133795667
 Transform:
   m_ObjectHideFlags: 0
@@ -57139,6 +57139,7 @@ MonoBehaviour:
   pointsApparitions: {fileID: 133795666}
   monAnimator: {fileID: 434098011}
   nomTriggerAnimation: finScene
+  tempsPartie: 60
 --- !u!4 &1299520458
 Transform:
   m_ObjectHideFlags: 0
