@@ -61,6 +61,12 @@ public class LogiqueJeu : MonoBehaviour
 
     private bool animationLancee = false;
 
+    /// Temps d'une partie en secondes
+    /// </summary>
+    [SerializeField]
+    private int tempsPartie = 180;
+
+
     void Awake()
     {
         // Assure qu'il y ait qu'une instance de cette classe
@@ -95,7 +101,7 @@ public class LogiqueJeu : MonoBehaviour
     /// </summary>
     public void DebutPartie()
     {
-        affichagePointsTemps.Commencer();
+        affichagePointsTemps.Commencer(tempsPartie);
         pointsFinaux = 0;
     }
 
@@ -106,7 +112,7 @@ public class LogiqueJeu : MonoBehaviour
     {
         StartCoroutine(JouerAnimationEtChangerScene());
         pointsFinaux = affichagePointsTemps.GetPoints();
-        tempsDernierePartie = Mathf.Round(affichagePointsTemps.GetTemps() - affichagePointsTemps.GetMinuteur());
+        tempsDernierePartie = Mathf.Round(tempsPartie - affichagePointsTemps.GetMinuteur());
         SceneManager.LoadScene(nomScene);
 
     }

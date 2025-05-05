@@ -10,8 +10,7 @@ public class AffichagePointsTemps : MonoBehaviour
     /// <summary>
     /// Temps d'une partie en secondes
     /// </summary>
-    [SerializeField]
-    private int tempsPartie = 180;
+    private int tempsPartie = 0;
 
     /// <summary>
     /// Le temps restant
@@ -81,8 +80,9 @@ public class AffichagePointsTemps : MonoBehaviour
     /// <summary>
     /// Commencer le minuteur et le remettre à sa valeur initiale
     /// </summary>
-    public void Commencer()
+    public void Commencer(int temps)
     {
+        tempsPartie = temps;
         timerActif = true;
         minuteur = tempsPartie;
         points = 0;
