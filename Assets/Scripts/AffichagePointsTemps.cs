@@ -1,14 +1,17 @@
 using TMPro;
 using UnityEngine;
 
-[RequireComponent(typeof(TextMeshPro))]
+/// <summary>
+/// Affichage des points accumulés et du temps restant à une partie
+/// </summary>
+[RequireComponent(typeof(TextMeshProUGUI))]
 public class AffichagePointsTemps : MonoBehaviour
 {
     /// <summary>
     /// Temps d'une partie en secondes
     /// </summary>
     [SerializeField]
-    private float tempsPartie = 180;
+    private int tempsPartie = 180;
 
     /// <summary>
     /// Le temps restant
@@ -29,12 +32,12 @@ public class AffichagePointsTemps : MonoBehaviour
     /// <summary>
     /// Référence au textfield
     /// </summary>
-    private TextMeshPro text;
+    private TextMeshProUGUI text;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        text = GetComponent<TextMeshPro>();
+        text = GetComponent<TextMeshProUGUI>();
         minuteur = tempsPartie;
     }
 
@@ -62,13 +65,15 @@ public class AffichagePointsTemps : MonoBehaviour
             secondesText = Mathf.RoundToInt(secondes).ToString();
         }
 
-        //Affichage
+        //S'il ne reste plus de temps, finir la partie
         if (minuteur <= 0)
         {
             timerActif = false;
+            LogiqueJeu.Instance.partieFinie(points, tempsPartie);
         }
         else
         {
+            //Affichage
             text.SetText("Vos points: \n" + points + "\n Temps restant:  \n" + minutesText + ":" + secondesText);
         }
     }
@@ -94,4 +99,5 @@ public class AffichagePointsTemps : MonoBehaviour
             points += 50;
         }
     }
+
 }

@@ -23,11 +23,6 @@ public class ControlleurFusil : MonoBehaviour
     //[SerializeField]
     //private LineRenderer ligneTir;
 
-    /// <summary>
-    /// Distance maximale du tir
-    /// </summary>
-    [SerializeField]
-    private float distanceMax = 50f;
 
     /// <summary>
     /// Vitesse de la balle
