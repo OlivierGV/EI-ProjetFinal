@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// Gérer l'apparition des chats
+/// </summary>
 public class PointsApparitionsChats : MonoBehaviour
 {
     /// <summary>
@@ -19,7 +22,7 @@ public class PointsApparitionsChats : MonoBehaviour
     /// Combien de gameobjects
     /// </summary>
     [SerializeField]
-    private float nombreApparition;
+    public float nombreApparition;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

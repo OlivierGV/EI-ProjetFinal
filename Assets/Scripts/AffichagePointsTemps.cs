@@ -69,7 +69,7 @@ public class AffichagePointsTemps : MonoBehaviour
         if (minuteur <= 0)
         {
             timerActif = false;
-            LogiqueJeu.Instance.partieFinie(points, tempsPartie);
+            LogiqueJeu.Instance.partieFinie();
         }
         else
         {
@@ -100,4 +100,12 @@ public class AffichagePointsTemps : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Accesseurs pour points, minuteur et temps
+    /// </summary>
+    /// <returns></returns>
+    public int GetPoints() { return points; }
+    public float GetMinuteur() { return minuteur; }
+
+    public float GetTemps() { return tempsPartie; }
 }

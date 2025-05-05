@@ -3,19 +3,22 @@ using UnityEngine;
 using UnityEngine.Windows;
 using static OVRPlugin;
 
+/// <summary>
+/// Gérer le mouvement du joueur
+/// </summary>
 public class Joueur : MonoBehaviour
 {
+    /// <summary>
+    /// Vitesse du joueur
+    /// </summary>
     [SerializeField]
-    int vitesse = 1;
+    int vitesse = 3;
 
+    /// <summary>
+    /// Référence à l'ancre des yeux
+    /// </summary>
     [SerializeField]
     GameObject ancreYeux;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -32,14 +35,4 @@ public class Joueur : MonoBehaviour
             gameObject.transform.Translate(aDroite * vitesse * deplacement.x * Time.deltaTime, Space.World);
         }
     }
-
-
-    /**
-     * 
-     * 
-     *         if (OVRInput.GetUp(OVRInput.Button.One))
-        {
-            OVRInput.SetControllerVibration(1, 1, OVRInput.Controller.RTouch);
-        }
-    */
 }

@@ -19,12 +19,32 @@ public class LogiqueJeu : MonoBehaviour
     private string nomScene;
 
     /// <summary>
+    /// Référence aux points d'apparitions
+    /// </summary>
+    [SerializeField]
+    private PointsApparitionsChats pointsApparitions;
+
+    /// <summary>
+    /// Nombre de chats encore en vie
+    /// </summary>
+    private float nombreChatsRestants = 0;
+
+    /// <summary>
     /// Instance unique
     /// </summary>
     public static LogiqueJeu Instance { get; private set; }
 
+    /// <summary>
+    /// Variable statique pour les points finaux
+    /// Permet d'y accéder dans le menu de fin
+    /// </summary>
     public static int pointsFinaux = 0;
-    public static int tempsDernierePartie = 0;
+
+    /// <summary>
+    /// Variable statique pour le tempss écoulé de la partie
+    /// Permet d'y accéder dans le menu de fin
+    /// </summary>
+    public static float tempsDernierePartie = 0;
 
     void Awake()
     {
@@ -37,6 +57,7 @@ public class LogiqueJeu : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -46,6 +67,7 @@ public class LogiqueJeu : MonoBehaviour
         {
             throw new System.Exception("Aucune scène indiquée");
         }
+        nombreChatsRestants = pointsApparitions.nombreApparition;
         DebutPartie();
     }
 
@@ -61,11 +83,12 @@ public class LogiqueJeu : MonoBehaviour
     /// <summary>
     /// Quand une partie est finie, changer de scène
     /// </summary>
-    public void partieFinie(int points, int temps)
+    public void partieFinie()
     {
-        pointsFinaux = points;
-        tempsDernierePartie = temps;
+        pointsFinaux = affichagePointsTemps.GetPoints();
+        tempsDernierePartie = Mathf.Round(affichagePointsTemps.GetTemps() - affichagePointsTemps.GetMinuteur());
         SceneManager.LoadScene(nomScene);
+
     }
 
     /// <summary>
@@ -73,6 +96,11 @@ public class LogiqueJeu : MonoBehaviour
     /// </summary>
     public void incrementerPoints()
     {
+        nombreChatsRestants--;
         affichagePointsTemps.IncrementerPoints();
+        if (nombreChatsRestants <= 0)
+        {
+            partieFinie();
+        }
     }
 }

@@ -3,7 +3,10 @@
     using UnityEditor.EditorTools;
     using UnityEngine;
     using UnityEngine.AI;
-
+    
+/// <summary>
+/// Gérer le comportement d'un chat
+/// </summary>
     public class Chat : MonoBehaviour
     {
         /// <summary>
@@ -199,19 +202,16 @@
         }
 
     /// <summary>
-    /// Si on collisionne avec de l'eau, on s'enfuis
+    /// Si le chat est mouillé, on le fait disparaître
     /// </summary>
     /// <param name="collision"></param>
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision != null)
+        if(other.tag == "eau" && !pointRecupere)
         {
-            if (!collision.gameObject.CompareTag("eau"))
-            {
-                LogiqueJeu.Instance.incrementerPoints();
-                faireMourir();
-            }
-
+            pointRecupere = true;
+            LogiqueJeu.Instance.incrementerPoints();
+            faireMourir();
         }
     }
 }

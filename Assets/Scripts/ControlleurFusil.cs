@@ -17,12 +17,6 @@ public class ControlleurFusil : MonoBehaviour
     [SerializeField]
     private GameObject prefabBalle;
 
-    /// <summary>
-    /// Ligne de tir
-    /// </summary>
-    //[SerializeField]
-    //private LineRenderer ligneTir;
-
 
     /// <summary>
     /// Vitesse de la balle
@@ -30,22 +24,20 @@ public class ControlleurFusil : MonoBehaviour
     [SerializeField]
     private float vitesseBalle = 5f;
 
+    /// <summary>
+    /// Référence à la source audio pour le fusil
+    /// </summary>
     private AudioSource sourceAudio;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //ligneTir = GetComponent<LineRenderer>();
-        //ligneTir.enabled = true;
         sourceAudio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Ligne pour savoir où qu'on tire
-        //ligneTir.SetPosition(0, baril.position);
-        //ligneTir.SetPosition(1, baril.position + (baril.transform.forward * distanceMax));
 
         //Si on tire la gachette, tirer le fusil
         if (OVRInput.Get(OVRInput.RawButton.RIndexTrigger))
