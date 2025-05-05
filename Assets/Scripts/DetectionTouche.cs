@@ -54,10 +54,11 @@ public class DetectionTouche : MonoBehaviour
     {
         monAnimator.SetTrigger(nomTriggerAnimation);
 
+        yield return null;
+
         AnimatorStateInfo info = monAnimator.GetCurrentAnimatorStateInfo(0);
         float duree = info.length;
 
-        yield return new WaitForSeconds(0.1f);
         yield return new WaitForSeconds(duree);
 
         SceneManager.LoadScene(nomScene);

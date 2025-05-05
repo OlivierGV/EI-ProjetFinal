@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -46,6 +47,20 @@ public class LogiqueJeu : MonoBehaviour
     /// </summary>
     public static float tempsDernierePartie = 0;
 
+    /// <summary>
+    /// L'Animator attaché à l'objet qui joue l'animation
+    /// </summary>
+    [SerializeField]
+    private Animator monAnimator;
+
+    /// <summary>
+    /// Le nom du trigger dans l'Animator
+    /// </summary>
+    [SerializeField]
+    private string nomTriggerAnimation = "finScene";
+
+    private bool animationLancee = false;
+
     void Awake()
     {
         // Assure qu'il y ait qu'une instance de cette classe
@@ -67,6 +82,10 @@ public class LogiqueJeu : MonoBehaviour
         {
             throw new System.Exception("Aucune scène indiquée");
         }
+        if (monAnimator == null)
+        {
+            Debug.LogError("Aucun Animator assigné");
+        }
         nombreChatsRestants = pointsApparitions.nombreApparition;
         DebutPartie();
     }
@@ -85,6 +104,7 @@ public class LogiqueJeu : MonoBehaviour
     /// </summary>
     public void partieFinie()
     {
+        StartCoroutine(JouerAnimationEtChangerScene());
         pointsFinaux = affichagePointsTemps.GetPoints();
         tempsDernierePartie = Mathf.Round(affichagePointsTemps.GetTemps() - affichagePointsTemps.GetMinuteur());
         SceneManager.LoadScene(nomScene);
@@ -102,5 +122,20 @@ public class LogiqueJeu : MonoBehaviour
         {
             partieFinie();
         }
+    }
+
+    // Coroutine pour lancer la transition
+    private IEnumerator JouerAnimationEtChangerScene()
+    {
+        monAnimator.SetTrigger(nomTriggerAnimation);
+
+        yield return null;
+
+        AnimatorStateInfo info = monAnimator.GetCurrentAnimatorStateInfo(0);
+        float duree = info.length;
+
+        yield return new WaitForSeconds(duree);
+
+        SceneManager.LoadScene(nomScene);
     }
 }

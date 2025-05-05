@@ -1928,6 +1928,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nomScene: ScenePrincipale
+  monAnimator: {fileID: 1073797260}
+  nomTriggerAnimation: finScene
 --- !u!4 &2119121633
 Transform:
   m_ObjectHideFlags: 0
